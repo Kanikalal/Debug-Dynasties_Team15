@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout and Nutrition Sync</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .sync-container {
+      margin-top: 50px;
+    }
+    .status-message {
+      margin-top: 20px;
+    }
+    .sync-button {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .sync-status {
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .status-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .status-failure {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container sync-container text-center">
+    <h2 class="mb-4">Sync with Fitness Tracker</h2>
+    <button id="syncButton" class="btn btn-primary sync-button">Sync Now</button>
+    
+    <!-- Status Message -->
+    <div id="statusMessage" class="status-message"></div>
+  </div>
+
+  <!-- Bootstrap JS and Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JavaScript -->
+  <script>
+    document.getElementById('syncButton').addEventListener('click', function() {
+      // Show loading message
+      const statusMessage = document.getElementById('statusMessage');
+      statusMessage.innerHTML = '<p>Syncing data...</p>';
+      statusMessage.className = 'status-message';
+
+      // Make an AJAX request to sync with the fitness tracker
+      fetch('/api/sync-fitness-tracker', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          // Optional: include any additional data needed for syncing
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          statusMessage.innerHTML = '<p>Sync successful!</p>';
+          statusMessage.classList.add('sync-status', 'status-success');
+          // Update UI with new data if needed
+        } else {
+          statusMessage.innerHTML = '<p>Sync failed. Please try again.</p>';
+          statusMessage.classList.add('sync-status', 'status-failure');
+        }
+      })
+      .catch(error => {
+        statusMessage.innerHTML = '<p>An error occurred. Please try again.</p>';
+        statusMessage.classList.add('sync-status', 'status-failure');
+      });
+    });
+  </script>
+
+</body>
+</html>
