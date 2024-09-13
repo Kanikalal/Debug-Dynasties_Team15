@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout and Nutrition Planner</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Workout Suggestions</h1>
+        <div id="workouts"></div>
+
+        <h1>Meal Plans</h1>
+        <div id="meal-plans"></div>
+    </div>
+    <script>
+        fetch('/api/workouts/')
+            .then(response => response.json())
+            .then(data => {
+                const workoutsDiv = document.getElementById('workouts');
+                data.forEach(workout => {
+                    const div = document.createElement('div');
+                    div.innerHTML = `<h2>${workout.name}</h2><p>${workout.description}</p><p>Duration: ${workout.duration} minutes</p>`;
+                    workoutsDiv.appendChild(div);
+                });
+            });
+
+        fetch('/api/meal-plans/')
+            .then(response => response.json())
+            .then(data => {
+                const mealPlansDiv = document.getElementById('meal-plans');
+                data.forEach(mealPlan => {
+                    const div = document.createElement('div');
+                    div.innerHTML = `<h2>${mealPlan.meal_name}</h2><p>Calories: ${mealPlan.calories}</p><p>Ingredients: ${mealPlan.ingredients}</p>`;
+                    mealPlansDiv.appendChild(div);
+                });
+            });
+    </script>
+</body>
+</html>
